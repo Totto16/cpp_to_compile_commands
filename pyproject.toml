@@ -1,6 +1,6 @@
 [project]
 name = "cpp-to-compile-commands"
-version = "0.1.0"
+version = "0.1.1"
 description = "Convert microsoft c_cpp_properties.json to a compilation database file"
 authors = [{ name = "Totto16" }]
 readme = "README.md"
