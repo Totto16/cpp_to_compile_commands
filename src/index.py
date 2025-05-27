@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 
-from logging import Logger
+import json
+import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
+
 from arguments import parse_arguments
 from compilation_database import create_compilation_database
 from logger import setup_custom_logger
 from properties_parser import parse_c_cpp_properties
-import json
-import sys
+
+if TYPE_CHECKING:
+    from logging import Logger
 
 
 def main() -> int:

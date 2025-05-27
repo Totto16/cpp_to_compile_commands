@@ -1,5 +1,6 @@
 import argparse
 from typing import cast
+
 from logger import LogLevel
 
 

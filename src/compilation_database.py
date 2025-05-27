@@ -136,7 +136,7 @@ def create_compilation_database_from_v4(
 
     arguments_object = get_arguments_object(config)
 
-    root = Path(".")
+    root = Path()
 
     sources = resolve_sources(root, args.sources)
 

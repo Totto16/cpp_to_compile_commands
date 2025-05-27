@@ -33,6 +33,7 @@ ignore = [
     "C90",     # mccabe => complexity isn't of concern atm.
     "TC006",   # runtime-cast-value => I prefer using normal types, not string quoted ones
     "TRY300",  # move return from try to else block, I hate that control flow in python, that try can have an else block is just dumb
+    "G004",    # logging with f strings makes sense, if the messeg just needs rto be formatted, before the log is executed
     "FIX",     # todo activate
     "TD",      # todo activate,
 ]
@@ -45,7 +46,13 @@ unfixable = []
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
-per-file-ignores = {}
+per-file-ignores = { "src/data/*.py" = [
+    "ERA001", # ignore "ERA001" (commented-out code)
+    "N815",   # ignore wrong case, as it's generated
+    "UP006",  # ignore Use `list` instead of `List` for type annotation, as it's generated ,
+    "UP035",  # ignore `typing.List` is deprecated, use `list` instead, as it's generated
+    "COM812", # ignore Trailing comma missing, as it's generated
+] }
 
 
 [tool.ruff.format]
