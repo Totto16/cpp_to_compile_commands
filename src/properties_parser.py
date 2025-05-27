@@ -19,7 +19,7 @@ def parse_c_cpp_properties(
         try:
             model = Model.model_validate(
                 data,
-                strict=True,
+                strict=False,
             )
             return (model, None)
         except ValidationError as e:
