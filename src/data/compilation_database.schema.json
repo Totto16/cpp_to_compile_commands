@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "definitions": {
+        "directory": {
+            "type": "string"
+        },
+        "file": {
+            "type": "string"
+        },
+        "arguments": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "output": {
+            "type": "string"
+        }
+    },
+    "properties": {
+        "directory": {
+            "$ref": "#/definitions/directory"
+        },
+        "file": {
+            "$ref": "#/definitions/file"
+        },
+        "arguments": {
+            "$ref": "#/definitions/arguments"
+        },
+        "output": {
+            "$ref": "#/definitions/output"
+        }
+    },
+    "required": [
+        "directory",
+        "file",
+        "arguments"
+    ],
+    "additionalProperties": false
+}
