@@ -136,7 +136,7 @@ def create_compilation_database_from_v4(
 
     arguments_object = get_arguments_object(config)
 
-    root = Path()
+    root = Path().absolute()
 
     sources = resolve_sources(root, args.sources)
 
@@ -153,8 +153,8 @@ def create_compilation_database_from_v4(
         arguments.extend(arguments_object.conditional_args[language])
 
         new_model = Model(
-            directory=Directory(str(root)),
-            file=File(str(file)),
+            directory=Directory(str(root.absolute())),
+            file=File(str(file.absolute())),
             arguments=Arguments(arguments),
         )
         result.append(new_model)
