@@ -43,5 +43,5 @@ jobs:
         with:
           name: FInal Package
           path:  | 
-            dist/oopetris-*.tar.gz
-            dist/oopetris-*.whl
+            dist/cpp_to_compile_commands-*.tar.gz
+            dist/cpp_to_compile_commands-*.whl

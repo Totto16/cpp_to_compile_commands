@@ -11,7 +11,7 @@ requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-cpp_to_compile_commands = "cpp_to_compile_commands.cli:main"
+cpp_to_compile_commands = "index:main"
 
 
 [tool.ruff]
