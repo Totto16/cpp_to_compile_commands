@@ -3,7 +3,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from data. import Model
+from data.c_cpp_properties import Model
 
 
 def parse_c_cpp_properties(

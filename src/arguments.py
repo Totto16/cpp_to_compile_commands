@@ -8,6 +8,7 @@ class ParserResult:
     output: str
     cross: bool
     level: LogLevel
+    sources: str
 
 
 def parse_arguments() -> ParserResult:
@@ -61,6 +62,15 @@ def parse_arguments() -> ParserResult:
         dest="level",
         type=lambda s: LogLevel.from_str(s) or cast(LogLevel, s.lower()),
         help="The loglevel to use",
+    )
+
+    parser.add_argument(
+        "-s",
+        "--sources",
+        dest="sources",
+        required=False,
+        default="src|test",
+        help="The source file to scan and add, can be a list, that is seperated by |",
     )
 
     return cast(ParserResult, parser.parse_args())

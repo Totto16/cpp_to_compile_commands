@@ -18,7 +18,7 @@ def main() -> int:
     model, err = parse_c_cpp_properties(Path(args.file))
 
     if model is None or err is not None:
-        logger.error(f"An error occured while parsing the input file: {err}"),
+        logger.error(f"An error occured while parsing the input file: {err}")
         return 1
 
     compilation_database, err2 = create_compilation_database(args, model)
@@ -35,7 +35,7 @@ def main() -> int:
         final_output_file.parent.mkdir(exist_ok=True, parents=True)
 
     with Path.open(final_output_file, "w") as f:
-        json.dump(compilation_database.raw, f, indent=2)
+        json.dump(compilation_database, f, indent=2)
 
     return 0
 
