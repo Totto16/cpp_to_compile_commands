@@ -39,7 +39,8 @@ def main() -> int:
         final_output_file.parent.mkdir(exist_ok=True, parents=True)
 
     with Path.open(final_output_file, "w") as f:
-        json.dump(compilation_database, f, indent=2)
+        data = [c.model_dump() for c in compilation_database]
+        json.dump(data, f, indent=2)
 
     return 0
 
