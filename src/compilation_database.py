@@ -1,4 +1,5 @@
 import os
+import subprocess
 from enum import Enum
 from logging import Logger
 from pathlib import Path
@@ -86,7 +87,59 @@ class ArgumentsObject:
         self.compiler = compiler
 
 
-def get_arguments_object(config: c_cpp_properties.Configuration) -> ArgumentsObject:
+def parse_search_list(inp: str) -> list[str]:
+
+    result: list[str] = []
+
+    is_in_search_mode = False
+
+    for line in inp.split("\n"):
+        if line == "#include <...> search starts here:":
+            is_in_search_mode = True
+
+        if line == '#include "..." search starts here:':
+            is_in_search_mode = True
+
+        if line == "End of search list.":
+            is_in_search_mode = True
+
+        if is_in_search_mode:
+            path = Path(line.removeprefix(" "))
+            if path.exists():
+                result.append(str(path.absolute().resolve()))
+
+    return result
+
+
+def get_standard_include_paths(language: Language, compiler: str) -> list[str]:
+    try:
+        language_str = "c" if language == Language.c else "c++"
+
+        # TODO. also support clang and detect compiler based on string
+        result = subprocess.run(  # noqa: S603
+            [compiler, f"-x{language_str}", "-E", "-v", "-"],
+            check=True,
+            capture_output=True,
+            input="",
+        )
+
+        if result.returncode != 0:
+            msg = f"Invalid Return code f{result.returncode}"
+            raise RuntimeError(msg)  # noqa: TRY301
+
+        res = result.stderr.decode()
+
+        return parse_search_list(res)
+
+    except Exception as e:  # noqa: BLE001
+        logger.info(e)
+        return []
+
+
+def get_arguments_object(
+    args: ParserResult,
+    config: c_cpp_properties.Configuration,
+) -> ArgumentsObject:
     # TODO resolve $CC or $CXX env vraibale, if nothing was given
     compiler = "g++" if config.compilerPath is None else config.compilerPath
 
@@ -121,6 +174,15 @@ def get_arguments_object(config: c_cpp_properties.Configuration) -> ArgumentsObj
     if config.cStandard is not None:
         arguments.conditional_args[Language.c].append(f"--std={config.cStandard.value}")
 
+    if args.cross:
+        for language in list(Language):
+            standard_include_paths = get_standard_include_paths(language, compiler)
+            for include_path in standard_include_paths:
+                if include_path == "":
+                    continue
+
+                arguments.conditional_args[language].append(f"-I{include_path}")
+
     return arguments
 
 
@@ -136,7 +198,7 @@ def create_compilation_database_from_v4(
     if config is None:
         return (None, "No valid configurations entry in file")
 
-    arguments_object = get_arguments_object(config)
+    arguments_object = get_arguments_object(args, config)
 
     root = Path().absolute()
 
