@@ -3,14 +3,14 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from data.schema import Model
+from data. import Model
 
 
 def parse_c_cpp_properties(
     file: Path,
 ) -> tuple[Model, None] | tuple[None, str | ValidationError]:
 
-    if Path.exists(file):
+    if not Path.exists(file):
         return (None, f"File {file} doesn't exist")
 
     with Path.open(file) as f:
