@@ -4,6 +4,18 @@ import json
 import os
 
 
+def read_file(file: str) -> list[str]:
+    with open(file) as f:
+        return f.readlines()
+
+
+def resolve_arg(arg: str) -> list[str]:
+    if arg.startswith("@"):
+        return read_file(arg.removeprefix("@"))
+    else:
+        return [arg]
+
+
 def main() -> None:
     with open(".vscode/c_cpp_properties.json") as f:
         data = json.load(f)
@@ -17,6 +29,9 @@ def main() -> None:
 
     additional_args: list[str] = []
 
+    for arg in compilerArgs:
+        additional_args.extend(resolve_arg(arg))
+
     if cppStandard is not None:
         additional_args.append(f"--std={cppStandard}")
 
@@ -29,8 +44,6 @@ def main() -> None:
                 command = {
                     "directory": os.getcwd(),
                     "command": f"{compiler_path} -c {filepath} "
-                    + " ".join(compilerArgs)
-                    + " "
                     + " ".join(additional_args)
                     + " "
                     + " ".join(f"-I{inc}" for inc in include_paths)
