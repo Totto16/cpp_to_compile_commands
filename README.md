@@ -7,7 +7,7 @@ This file can be read by everything, including clangd.
 
 ## Installation
 
-You can find it on [pypi](https://pypi.org/)
+You can find it on [pypi](https://pypi.org/project/cpp-to-compile-commands/)
 
 ## Usage
 
