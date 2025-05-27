@@ -2,8 +2,13 @@
 
 set -ex
 
+generate_file() {
+
+    uv run datamodel-codegen --input "$1" --input-file-type jsonschema --output "$2" --use-annotated --output-model-type=pydantic_v2.BaseModel --formatters "ruff-format" --target-python-version "3.13" --use-schema-description --use-subclass-enum
+
+}
+
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
-uv run datamodel-codegen --input "$SCRIPT_DIR/c_cpp_properties.schema.json" --input-file-type jsonschema --output "$SCRIPT_DIR/c_cpp_properties.schema.py" --use-annotated --output-model-type=pydantic_v2.BaseModel
-
-uv run datamodel-codegen --input "$SCRIPT_DIR/compilation_database.json" --input-file-type jsonschema --output "$SCRIPT_DIR/compilation_database.py" --use-annotated --output-model-type=pydantic_v2.BaseModel
+generate_file "$SCRIPT_DIR/c_cpp_properties.schema.json" "$SCRIPT_DIR/c_cpp_properties.py"
+generate_file "$SCRIPT_DIR/compilation_database.schema.json" "$SCRIPT_DIR/compilation_database.py"

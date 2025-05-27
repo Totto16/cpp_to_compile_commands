@@ -60,6 +60,7 @@ per-file-ignores = { "src/data/*.py" = [
     "UP006",  # ignore Use `list` instead of `List` for type annotation, as it's generated ,
     "UP035",  # ignore `typing.List` is deprecated, use `list` instead, as it's generated
     "COM812", # ignore Trailing comma missing, as it's generated
+    "I001",   # ignore Organize imports, as it's generated
 ] }
 
 
