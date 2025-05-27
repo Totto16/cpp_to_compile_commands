@@ -4,7 +4,7 @@ set -ex
 
 generate_file() {
 
-    uv run datamodel-codegen --input "$1" --input-file-type jsonschema --output "$2" --use-annotated --output-model-type=pydantic_v2.BaseModel --formatters "ruff-format" --target-python-version "3.13" --use-schema-description --use-subclass-enum
+    uv run datamodel-codegen --input "$1" --input-file-type jsonschema --output "$2" --use-annotated --output-model-type=pydantic_v2.BaseModel --formatters "ruff-format" --target-python-version "3.10" --use-schema-description --use-subclass-enum
 
 }
 
