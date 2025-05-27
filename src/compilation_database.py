@@ -114,10 +114,12 @@ def get_arguments_object(config: c_cpp_properties.Configuration) -> ArgumentsObj
         arguments.arguments.extend(resolve_arg(arg))
 
     if config.cppStandard is not None:
-        arguments.conditional_args[Language.cpp].append(f"--std={config.cppStandard}")
+        arguments.conditional_args[Language.cpp].append(
+            f"--std={config.cppStandard.value}",
+        )
 
     if config.cStandard is not None:
-        arguments.conditional_args[Language.c].append(f"--std={config.cStandard}")
+        arguments.conditional_args[Language.c].append(f"--std={config.cStandard.value}")
 
     return arguments
 
