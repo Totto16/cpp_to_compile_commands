@@ -1,0 +1,47 @@
+name: Lint CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Lint Files
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+
+    
+      - name: Install needed packages into virtualenv
+        run: |
+          uv sync --no-editable --all-groups
+
+      - name: Lint and Test files
+        run: |
+          uv run --no-editable ruff check --output-format github src/
+          uv run --no-editable mypy src/
+
+      - name: Build package
+        run: |
+          uv build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: FInal Package
+          path:  | 
+            dist/oopetris-*.tar.gz
+            dist/oopetris-*.whl
