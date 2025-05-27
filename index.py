@@ -12,6 +12,13 @@ def main() -> None:
     include_paths = config["includePath"]
     defines = config.get("defines", [])
     compiler_path = config.get("compilerPath", "g++")
+    cppStandard = config.get("cppStandard", None)
+    compilerArgs = config.get("compilerArgs", [])
+
+    additional_args: list[str] = []
+
+    if cppStandard is not None:
+        additional_args.append(f"--std={cppStandard}")
 
     commands: list[dict[str, str]] = []
 
@@ -22,6 +29,10 @@ def main() -> None:
                 command = {
                     "directory": os.getcwd(),
                     "command": f"{compiler_path} -c {filepath} "
+                    + " ".join(compilerArgs)
+                    + " "
+                    + " ".join(additional_args)
+                    + " "
                     + " ".join(f"-I{inc}" for inc in include_paths)
                     + " "
                     + " ".join(f"-D{define}" for define in defines),
