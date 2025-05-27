@@ -15,7 +15,7 @@ logger: Logger = get_logger()
 
 def read_file(file: Path) -> list[str]:
     with Path.open(file) as f:
-        return f.readlines()
+        return [line.rstrip("\n") for line in f]
 
 
 class ArgResolver:
@@ -24,10 +24,10 @@ class ArgResolver:
     def __init__(self) -> None:
         self.__prefix = None
 
-    def resolve_arg(self: Self, arg: str) -> list[str]:
+    def resolve(self: Self, arg: str) -> list[str]:
         if arg.startswith("@"):
             intermediate = read_file(Path(arg.removeprefix("@")))
-            return [res for a in intermediate for res in self.resolve_arg(a)]
+            return [res for a in intermediate for res in self.resolve(a)]
 
         if arg.startswith("-iprefix"):
             self.__prefix = Path(arg.removeprefix("-iprefix"))
