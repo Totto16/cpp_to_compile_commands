@@ -6,6 +6,14 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = ["pydantic>=2.11.5"]
 
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+cpp_to_compile_commands = "cpp_to_compile_commands.cli:main"
+
+
 [tool.ruff]
 
 # Exclude directories.
