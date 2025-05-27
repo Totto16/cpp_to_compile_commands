@@ -2,7 +2,9 @@ import logging
 import sys
 from enum import Enum
 from logging import Formatter, Logger, StreamHandler, getLogger
-from typing import Optional, Self
+from typing import Optional
+
+from typing_extensions import Self
 
 __GLOBAL__LOGGER__NAME = "__global__logger__"
 

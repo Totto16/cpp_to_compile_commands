@@ -3,7 +3,9 @@ import subprocess
 from enum import Enum
 from logging import Logger
 from pathlib import Path
-from typing import Optional, Self
+from typing import Optional
+
+from typing_extensions import Self
 
 from arguments import ParserResult
 from data import c_cpp_properties
