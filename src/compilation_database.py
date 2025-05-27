@@ -3,7 +3,7 @@ import subprocess
 from enum import Enum
 from logging import Logger
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Self
 
 from arguments import ParserResult
 from data import c_cpp_properties
@@ -18,11 +18,34 @@ def read_file(file: Path) -> list[str]:
         return f.readlines()
 
 
-def resolve_arg(arg: str) -> list[str]:
-    if arg.startswith("@"):
-        return read_file(Path(arg.removeprefix("@")))
+class ArgResolver:
+    __prefix: Optional[Path]
 
-    return [arg]
+    def __init__(self) -> None:
+        self.__prefix = None
+
+    def resolve_arg(self: Self, arg: str) -> list[str]:
+        if arg.startswith("@"):
+            intermediate = read_file(Path(arg.removeprefix("@")))
+            return [res for a in intermediate for res in self.resolve_arg(a)]
+
+        if arg.startswith("-iprefix"):
+            self.__prefix = Path(arg.removeprefix("-iprefix"))
+            return [arg]
+
+        if arg.startswith("-iwithprefixbefore"):
+            if self.__prefix is None:
+                logger.warning("tried resolving prefix, but no '-iprefix' was given")
+                return [arg]
+
+            path = arg.removeprefix("-iwithprefixbefore")
+            if path.startswith("/"):
+                path = path.removeprefix("/")
+
+            final_path = (self.__prefix / path).absolute()
+            return [f"-I{final_path}"]
+
+        return [arg]
 
 
 def resolve_used_config(
@@ -163,8 +186,10 @@ def get_arguments_object(
 
     compiler_args = [] if config.compilerArgs is None else config.compilerArgs
 
+    resolver = ArgResolver()
+
     for arg in compiler_args:
-        arguments.arguments.extend(resolve_arg(arg))
+        arguments.arguments.extend(resolver.resolve(arg))
 
     if config.cppStandard is not None:
         arguments.conditional_args[Language.cpp].append(
