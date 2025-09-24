@@ -242,6 +242,8 @@ def create_compilation_database_from_v4(
 
         arguments.extend(arguments_object.arguments)
         arguments.extend(arguments_object.conditional_args[language])
+        # append the input file, this is needed for e.g. clang-tidy
+        arguments.append(str(file.absolute()))
 
         new_model = Model(
             directory=Directory(str(root.absolute())),
